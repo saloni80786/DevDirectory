@@ -11,6 +11,8 @@ export default function ChatDrawer({ currentUserId, selectedDevId, selectedDevNa
   const [inputMsg, setInputMsg] = useState('');
 
   useEffect(() => {
+    if (!socket) return;
+
     if (currentUserId) {
       socket.emit('user_connected', currentUserId);
     }
@@ -32,6 +34,15 @@ export default function ChatDrawer({ currentUserId, selectedDevId, selectedDevNa
       receiverId: selectedDevId,
       message: inputMsg
     };
+
+    if (!socket) {
+      setMessages((prev) => [
+        ...prev,
+        { ...msgData, timestamp: new Date(), unavailable: true }
+      ]);
+      setInputMsg('');
+      return;
+    }
 
     socket.emit('send_message', msgData);
     setMessages((prev) => [...prev, { ...msgData, timestamp: new Date() }]);
