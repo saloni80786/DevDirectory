@@ -1,8 +1,8 @@
-import { lazy, useEffect } from 'react';
+
+import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
-
 
 // Route-level code splitting
 const Home = lazy(() => import('./pages/Home'));
@@ -15,41 +15,61 @@ const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 const AddProject = lazy(() => import('./pages/AddProject'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
-// Track page visits only during local development.
+// Track page visits only in development.
+// Tracking failure must not prevent the app from rendering.
 function useTracker() {
   const location = useLocation();
 
   useEffect(() => {
-    // GitHub Pages has no local backend.
+    // GitHub Pages does not provide the local development backend.
     if (import.meta.env.PROD) return;
 
-    const trackPageHit = async () => {
+    const controller = new AbortController();
+
+    async function trackPageHit() {
       try {
         await fetch('http://localhost:5000/api/track', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify({
             userId: localStorage.getItem('userId') || 'guest_user',
             action: 'PAGE_VIEW',
-            metadata: { path: location.pathname },
+            metadata: {
+              path: location.pathname,
+            },
           }),
+          signal: controller.signal,
         });
-      } catch (err) {
-        console.error('Tracking failed:', err);
+      } catch (error) {
+        // Ignore tracking errors; the website should remain usable.
+        if (error.name !== 'AbortError') {
+          console.warn('Page tracking unavailable:', error.message);
+        }
       }
-    };
+    }
 
     trackPageHit();
+
+    return () => controller.abort();
   }, [location.pathname]);
+}
+
+function PageLoader() {
+  return (
+    <div className="page-loader" role="status" aria-live="polite">
+      <span className="page-loader-spinner" aria-hidden="true" />
+      <p>Loading DevDirectory...</p>
+    </div>
+  );
 }
 
 export default function App() {
   useTracker();
 
- 
-
   return (
-    <>
+    <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route element={<Layout />}>
           {/* Public routes */}
@@ -69,6 +89,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/add-project"
             element={
@@ -77,6 +98,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/projects/:id/edit"
             element={
@@ -86,11 +108,10 @@ export default function App() {
             }
           />
 
+          {/* Fallback for unknown routes */}
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-
-     
-    </>
+    </Suspense>
   );
 }

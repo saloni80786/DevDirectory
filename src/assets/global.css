@@ -860,3 +860,241 @@ h3 {
 :focus-visible {
   outline-color: #C49A52;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================
+   DARK MODE — DevDirectory
+========================================== */
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --black: #171512;
+  --charcoal-950: #1C1915;
+  --charcoal-900: #25211C;
+  --charcoal-800: #302A23;
+  --charcoal-700: #40372C;
+
+  --line: #494033;
+  --line-soft: #393127;
+
+  --text: #F6EFE4;
+  --text-2: #C5B7A4;
+  --text-3: #9A8B78;
+
+  --gold: #E0B86F;
+  --gold-strong: #F0CB86;
+  --gold-ink: #21180B;
+  --gold-wash: rgba(224, 184, 111, 0.14);
+}
+
+/* Main background */
+:root[data-theme="dark"] body {
+  background: var(--black);
+  color: var(--text);
+}
+
+/* Navbar and mobile menu */
+:root[data-theme="dark"] .navbar {
+  background: rgba(23, 21, 18, 0.95);
+  border-color: var(--line-soft);
+}
+
+:root[data-theme="dark"] .navbar__links {
+  background: var(--charcoal-950);
+}
+
+:root[data-theme="dark"] .navbar__links a.active {
+  background: var(--gold-wash);
+  color: var(--gold);
+}
+
+/* Cards and panels */
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .panel,
+:root[data-theme="dark"] .dialog,
+:root[data-theme="dark"] .palette,
+:root[data-theme="dark"] .skeleton-card,
+:root[data-theme="dark"] .post,
+:root[data-theme="dark"] .alert {
+  background: var(--charcoal-900);
+  color: var(--text);
+  border-color: var(--line-soft);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+}
+
+:root[data-theme="dark"] .card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+}
+
+:root[data-theme="dark"] .feed,
+:root[data-theme="dark"] .footer {
+  background: var(--charcoal-950);
+  border-color: var(--line-soft);
+}
+
+:root[data-theme="dark"] .jump__item,
+:root[data-theme="dark"] .jump__item:hover {
+  background: var(--charcoal-900);
+  border-color: var(--line);
+}
+
+/* Inputs and search */
+:root[data-theme="dark"] .field input,
+:root[data-theme="dark"] .field select,
+:root[data-theme="dark"] .field textarea,
+:root[data-theme="dark"] .field-search,
+:root[data-theme="dark"] .hero__search,
+:root[data-theme="dark"] .search-trigger,
+:root[data-theme="dark"] .toolbar select,
+:root[data-theme="dark"] .inline-search,
+:root[data-theme="dark"] .tag-input,
+:root[data-theme="dark"] .preview,
+:root[data-theme="dark"] .btn--toggle,
+:root[data-theme="dark"] .segmented button {
+  background: var(--charcoal-900);
+  color: var(--text);
+  border-color: var(--line);
+}
+
+:root[data-theme="dark"] input::placeholder,
+:root[data-theme="dark"] textarea::placeholder {
+  color: var(--text-3);
+}
+
+/* Buttons */
+:root[data-theme="dark"] .btn--ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--line);
+}
+
+:root[data-theme="dark"] .btn--ghost:hover:not(:disabled) {
+  background: var(--charcoal-800);
+}
+
+:root[data-theme="dark"] .btn--primary {
+  background: var(--gold);
+  color: var(--gold-ink);
+}
+
+/* Avatars and tags */
+:root[data-theme="dark"] .avatar {
+  background: var(--charcoal-700);
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .avatar--ring {
+  box-shadow: 0 0 0 2px var(--black),
+              0 0 0 4px var(--gold);
+}
+
+:root[data-theme="dark"] .chip,
+:root[data-theme="dark"] .status--featured {
+  background: var(--charcoal-800);
+  color: var(--text-2);
+  border-color: var(--line);
+}
+
+/* Tables, charts and other details */
+:root[data-theme="dark"] .stats,
+:root[data-theme="dark"] .stat {
+  border-color: var(--line-soft);
+}
+
+:root[data-theme="dark"] .bars__track {
+  background: var(--charcoal-800);
+}
+
+:root[data-theme="dark"] .toast {
+  background: var(--charcoal-800);
+  color: var(--text);
+  border-color: var(--line);
+}
+
+:root[data-theme="dark"] .palette__list button.is-active {
+  background: var(--charcoal-700);
+}
+
+:root[data-theme="dark"] .notfound__code {
+  color: var(--charcoal-700);
+}
+
+:root[data-theme="dark"] ::selection {
+  background: var(--gold);
+  color: var(--gold-ink);
+}
+
+
+
+
+
+
+
+
+
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 13px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--charcoal-900);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease,
+              border-color 0.2s ease,
+              transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--charcoal-800);
+  border-color: var(--gold);
+}
+
+.theme-toggle:active {
+  transform: scale(0.97);
+}

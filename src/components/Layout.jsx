@@ -10,32 +10,51 @@ export default function Layout() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const { pathname } = useLocation();
 
+  // Open command palette with Cmd/Ctrl + K.
   useEffect(() => {
     const onKey = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        setPaletteOpen((o) => !o);
+        setPaletteOpen((open) => !open);
       }
     };
+
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+
+    return () => {
+      window.removeEventListener('keydown', onKey);
+    };
   }, []);
 
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  // Scroll to top when the route changes.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <>
-      <a className="skip-link" href="#main">Skip to content</a>
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
+
       <Navbar onOpenPalette={() => setPaletteOpen(true)} />
+
       <main id="main" className="page">
         <ErrorBoundary key={pathname}>
-          <Suspense fallback={<SkeletonLoader variant="cards" count={3} />}>
+          <Suspense
+            fallback={<SkeletonLoader variant="cards" count={3} />}
+          >
             <Outlet />
           </Suspense>
         </ErrorBoundary>
       </main>
+
       <Footer />
-      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+
+      <CommandPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+      />
     </>
   );
 }
