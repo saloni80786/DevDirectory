@@ -1,3 +1,4 @@
+```jsx
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -9,7 +10,9 @@ import './assets/global.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter
+      basename={import.meta.env.BASE_URL.replace(/\/$/, '')}
+    >
       <AuthProvider>
         <ToastProvider>
           <FavoritesProvider>
@@ -20,3 +23,4 @@ createRoot(document.getElementById('root')).render(
     </BrowserRouter>
   </StrictMode>,
 );
+```
