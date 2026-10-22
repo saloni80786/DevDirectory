@@ -2,7 +2,7 @@ import { lazy, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
-import ChatDrawer from './components/ChatDrawer';
+
 
 // Route-level code splitting
 const Home = lazy(() => import('./pages/Home'));
@@ -46,8 +46,7 @@ function useTracker() {
 export default function App() {
   useTracker();
 
-  const currentUserId = localStorage.getItem('userId') || 'user_123';
-  const selectedDevId = 'dev_456';
+ 
 
   return (
     <>
@@ -91,12 +90,7 @@ export default function App() {
         </Route>
       </Routes>
 
-      {/* Global Chat Drawer */}
-      <ChatDrawer
-        currentUserId={currentUserId}
-        selectedDevId={selectedDevId}
-        selectedDevName="Developer"
-      />
+     
     </>
   );
 }
