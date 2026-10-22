@@ -4,7 +4,7 @@ import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import ChatDrawer from './components/ChatDrawer';
 
-// Route-level code splitting: each page ships as its own chunk.
+// Route-level code splitting
 const Home = lazy(() => import('./pages/Home'));
 const UserDirectory = lazy(() => import('./pages/UserDirectory'));
 const UserProfile = lazy(() => import('./pages/UserProfile'));
@@ -15,11 +15,14 @@ const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 const AddProject = lazy(() => import('./pages/AddProject'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
-// Tracking Custom Hook
+// Track page visits only during local development.
 function useTracker() {
   const location = useLocation();
 
   useEffect(() => {
+    // GitHub Pages has no local backend.
+    if (import.meta.env.PROD) return;
+
     const trackPageHit = async () => {
       try {
         await fetch('http://localhost:5000/api/track', {
@@ -28,8 +31,8 @@ function useTracker() {
           body: JSON.stringify({
             userId: localStorage.getItem('userId') || 'guest_user',
             action: 'PAGE_VIEW',
-            metadata: { path: location.pathname }
-          })
+            metadata: { path: location.pathname },
+          }),
         });
       } catch (err) {
         console.error('Tracking failed:', err);
@@ -37,7 +40,7 @@ function useTracker() {
     };
 
     trackPageHit();
-  }, [location]);
+  }, [location.pathname]);
 }
 
 export default function App() {
@@ -50,7 +53,7 @@ export default function App() {
     <>
       <Routes>
         <Route element={<Layout />}>
-          {/* Public */}
+          {/* Public routes */}
           <Route path="/" element={<Home />} />
           <Route path="/users" element={<UserDirectory />} />
           <Route path="/users/:id" element={<UserProfile />} />
@@ -58,10 +61,31 @@ export default function App() {
           <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/login" element={<Login />} />
 
-          {/* Protected */}
-          <Route path="/add-post" element={<ProtectedRoute><AddPost /></ProtectedRoute>} />
-          <Route path="/add-project" element={<ProtectedRoute><AddProject /></ProtectedRoute>} />
-          <Route path="/projects/:id/edit" element={<ProtectedRoute><AddProject /></ProtectedRoute>} />
+          {/* Protected routes */}
+          <Route
+            path="/add-post"
+            element={
+              <ProtectedRoute>
+                <AddPost />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-project"
+            element={
+              <ProtectedRoute>
+                <AddProject />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/projects/:id/edit"
+            element={
+              <ProtectedRoute>
+                <AddProject />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="*" element={<NotFound />} />
         </Route>

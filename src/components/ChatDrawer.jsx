@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import { Send, MessageSquare, X } from 'lucide-react';
 
-const socket = io('http://localhost:5000');
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
+const socket = BACKEND_URL ? io(BACKEND_URL) : null;
 
 export default function ChatDrawer({ currentUserId, selectedDevId, selectedDevName }) {
   const [isOpen, setIsOpen] = useState(false);
